@@ -8,6 +8,7 @@ public class Client {
     private int _port;
     private Socket s;
     private NetIO nio;
+    private UI OIHandler;
     public Client(String host, int port) throws IOException {
         _host = host;
         _port = port;
@@ -23,6 +24,13 @@ public class Client {
                 System.out.println("Ошибка: " + e.getMessage());
             }
         }).start();
+        new Thread(()->{
+            try {
+                OIHandler.startSending(this::send);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 
     public Void parse(String d){
@@ -35,24 +43,24 @@ public class Client {
         switch (cmd) {
             case INTRODUCE -> {
                 if (data.length > 1 && data[1].trim().length() > 0) {
-                    System.out.println(data[1]);
+                    OIHandler.displaySystemMessage(data[1]);
                 } else {
-                    System.out.println("Представьтесь, пожалуйста:");
+                    OIHandler.displaySystemMessage("Представьтесь, пожалуйста:");
                 }
             }
             case MESSAGE -> {
                 if (data.length > 1 && data[1].trim().length() > 0) {
-                    System.out.println(data[1]);
+                    OIHandler.displayMessage(data[1]);
                 }
             }
             case LOGGED_IN -> {
                 if (data.length > 1 && data[1].trim().length() > 0) {
-                    System.out.println("Пользователь " + data[1] + " вошёл в чат");
+                    OIHandler.displayMessage("Пользователь " + data[1] + " вошёл в чат");
                 }
             }
             case LOGGED_OUT -> {
                 if (data.length > 1 && data[1].trim().length() > 0) {
-                    System.out.println("Пользователь " + data[1] + " покинул чат");
+                    OIHandler.displayMessage("Пользователь " + data[1] + " покинул чат");
                 }
             }
             case null -> {
@@ -62,11 +70,17 @@ public class Client {
         return null;
     }
 
-    public void send(String userData) {
+    public Void send(String userData) {
         try {
             nio.sendData(userData);
+
         } catch (IOException e) {
             System.out.println("Ошибка: " + e);
         }
+        return null;
+    }
+
+    public void setIOHandler(UI OIHandler) {
+        this.OIHandler = OIHandler;
     }
 }
