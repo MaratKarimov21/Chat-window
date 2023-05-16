@@ -16,7 +16,7 @@ public class Client {
         nio = new NetIO(s);
     }
 
-    public void startReceiving(){
+    public void startProcessing(){
         new Thread(()->{
             try {
                 nio.startReceiving(this::parse);
@@ -34,7 +34,7 @@ public class Client {
     }
 
     public Void parse(String d){
-        var data = d.split(":", 2);
+        var data = d.split(":", 2); // INTRODUCE:представьтесь
         Command cmd = null;
         try {
             cmd = Command.valueOf(data[0]);
@@ -43,9 +43,9 @@ public class Client {
         switch (cmd) {
             case INTRODUCE -> {
                 if (data.length > 1 && data[1].trim().length() > 0) {
-                    OIHandler.displaySystemMessage(data[1]);
+//                    OIHandler.displaySystemMessage(data[1]);
                 } else {
-                    OIHandler.displaySystemMessage("Представьтесь, пожалуйста:");
+//                    OIHandler.displaySystemMessage("Представьтесь, пожалуйста:");
                 }
             }
             case MESSAGE -> {

@@ -5,24 +5,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Function;
 
-public class MainWindow extends JFrame implements UI {
+public class GraphicIO extends JFrame implements UI {
     private JLabel lbl;
     private JTextField tf;
     private JButton btn;
     private JScrollPane sp;
     private JTextArea ta;
-    public MainWindow(){
+    public GraphicIO(){
         setSize(600, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         lbl = new JLabel("");
-        tf = new JTextField();
+        tf = new JTextField("Представьтесь, пожалуйста");
         btn = new JButton("Отправить");
         ta = new JTextArea();
         sp = new JScrollPane(ta);
         GroupLayout gl = new GroupLayout(getContentPane());
         setLayout(gl);
-
-
 
         gl.setHorizontalGroup(
                 gl.createSequentialGroup()
@@ -53,6 +51,8 @@ public class MainWindow extends JFrame implements UI {
                         .addComponent(sp, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,GroupLayout.DEFAULT_SIZE)
                         .addGap(8)
         );
+
+        this.setVisible(true);
     }
 
     @Override
